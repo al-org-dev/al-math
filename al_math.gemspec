@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name          = "al_math"
-  spec.version       = "1.0.0"
+  spec.version       = "1.0.1"
   spec.authors       = ["al-org"]
   spec.email         = ["dev@al-org.dev"]
   spec.summary       = "Math rendering assets and tags for Jekyll"

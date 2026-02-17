@@ -28,8 +28,16 @@ module AlMath
       return '' unless site
       return '' unless truthy?(page['tikzjax'])
 
-      baseurl = site.config['baseurl'] || ''
-      %(<link defer rel="stylesheet" type="text/css" href="#{baseurl}/assets/al_math/css/tikzjax.min.css">)
+      libs = site.config['third_party_libraries'] || {}
+      tikz_css = libs.dig('tikzjax', 'url', 'css')
+      return '' if tikz_css.to_s.empty?
+
+      tikz_integrity = libs.dig('tikzjax', 'integrity', 'css')
+      if tikz_integrity.to_s.empty?
+        %(<link defer rel="stylesheet" type="text/css" href="#{tikz_css}" crossorigin="anonymous">)
+      else
+        %(<link defer rel="stylesheet" type="text/css" href="#{tikz_css}" integrity="#{tikz_integrity}" crossorigin="anonymous">)
+      end
     end
 
     private
@@ -62,7 +70,15 @@ module AlMath
       end
 
       if truthy?(page['tikzjax'])
-        out << %(<script defer src="#{baseurl}/assets/al_math/js/tikzjax.min.js" type="text/javascript"></script>)
+        tikz_js = libs.dig('tikzjax', 'url', 'js')
+        tikz_integrity = libs.dig('tikzjax', 'integrity', 'js')
+        if !tikz_js.to_s.empty?
+          if tikz_integrity.to_s.empty?
+            out << %(<script defer src="#{tikz_js}" type="text/javascript" crossorigin="anonymous"></script>)
+          else
+            out << %(<script defer src="#{tikz_js}" type="text/javascript" integrity="#{tikz_integrity}" crossorigin="anonymous"></script>)
+          end
+        end
       end
 
       out.join("\n")

@@ -21,7 +21,17 @@ class AlMathTagsTest < Minitest::Test
     {
       'mathjax' => { 'url' => { 'js' => 'https://cdn.example/mathjax.js' }, 'integrity' => { 'js' => 'sha-mathjax' } },
       'pseudocode' => { 'url' => { 'js' => 'https://cdn.example/pseudocode.js' }, 'integrity' => { 'js' => 'sha-pseudocode' } },
-      'polyfill' => { 'url' => { 'js' => 'https://cdn.example/polyfill.js' } }
+      'polyfill' => { 'url' => { 'js' => 'https://cdn.example/polyfill.js' } },
+      'tikzjax' => {
+        'url' => {
+          'css' => 'https://cdn.example/tikzjax.css',
+          'js' => 'https://cdn.example/tikzjax.js'
+        },
+        'integrity' => {
+          'css' => 'sha-tikz-css',
+          'js' => 'sha-tikz-js'
+        }
+      }
     }
   end
 
@@ -57,7 +67,7 @@ class AlMathTagsTest < Minitest::Test
 
   def test_renders_tikz_assets_when_enabled_on_page
     styles = render_styles(
-      config: { 'baseurl' => '/base' },
+      config: { 'baseurl' => '/base', 'third_party_libraries' => third_party_libraries },
       page: { 'tikzjax' => true }
     )
     scripts = render_scripts(
@@ -65,8 +75,10 @@ class AlMathTagsTest < Minitest::Test
       page: { 'tikzjax' => true }
     )
 
-    assert_includes styles, '/base/assets/al_math/css/tikzjax.min.css'
-    assert_includes scripts, '/base/assets/al_math/js/tikzjax.min.js'
+    assert_includes styles, 'https://cdn.example/tikzjax.css'
+    assert_includes styles, 'sha-tikz-css'
+    assert_includes scripts, 'https://cdn.example/tikzjax.js'
+    assert_includes scripts, 'sha-tikz-js'
   end
 
   def test_assets_generator_registers_math_assets
@@ -77,7 +89,7 @@ class AlMathTagsTest < Minitest::Test
     names = site.static_files.map(&:name)
     assert_includes names, 'mathjax-setup.js'
     assert_includes names, 'pseudocode-setup.js'
-    assert_includes names, 'tikzjax.min.js'
-    assert_includes names, 'tikzjax.min.css'
+    refute_includes names, 'tikzjax.min.js'
+    refute_includes names, 'tikzjax.min.css'
   end
 end
