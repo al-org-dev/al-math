@@ -1,14 +1,12 @@
-# Al-Math
+# al-math
 
-A Jekyll plugin that provides math-related assets and script loading.
+`al_math` provides math runtime loading for `al-folio` v1.x.
 
 ## Installation
 
 ```ruby
 gem 'al_math'
 ```
-
-Enable in `_config.yml`:
 
 ```yaml
 plugins:
@@ -17,12 +15,14 @@ plugins:
 
 ## Usage
 
+Render assets:
+
 ```liquid
 {% al_math_styles %}
 {% al_math_scripts %}
 ```
 
-TikZJax runtime assets are loaded from `third_party_libraries.tikzjax` when a page sets `tikzjax: true`.
+TikZJax runtime is loaded from CDN config when a page sets `tikzjax: true`.
 
 ```yaml
 third_party_libraries:
@@ -34,3 +34,12 @@ third_party_libraries:
       css: <optional-sri-hash>
       js: <optional-sri-hash>
 ```
+
+## Ecosystem context
+
+- Starter wiring/docs live in `al-folio`.
+- Math runtime ownership lives in this plugin.
+
+## Contributing
+
+Math runtime provider/config behavior changes should be proposed in this repository.
