@@ -65,7 +65,6 @@ module AlMath
           out << %(<script type="text/javascript" src="#{libs.dig('pseudocode', 'url', 'js')}" integrity="#{libs.dig('pseudocode', 'integrity', 'js')}" crossorigin="anonymous"></script>)
         else
           out << %(<script src="#{baseurl}/assets/al_math/js/mathjax-setup.js"></script>)
-          out << %(<script defer src="#{libs.dig('polyfill', 'url', 'js')}" crossorigin="anonymous"></script>)
         end
       end
 
