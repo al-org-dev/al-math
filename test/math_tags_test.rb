@@ -62,7 +62,10 @@ class AlMathTagsTest < Minitest::Test
     )
 
     assert_includes output, '/base/assets/al_math/js/mathjax-setup.js'
-    assert_includes output, 'polyfill.js'
+    # polyfill.io is deprecated (June 2024 supply-chain takeover) and unneeded by
+    # MathJax 3 on modern browsers, so it must no longer be emitted even when the
+    # site still lists a polyfill entry in third_party_libraries.
+    refute_includes output, 'polyfill'
   end
 
   def test_renders_tikz_assets_when_enabled_on_page
